@@ -1,0 +1,198 @@
+﻿<Window x:Class="EnhancedCybersecurityChatbot.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EnhancedCybersecurityChatbot"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="Enhanced Cybersecurity Chatbot" Height="650" Width="800"
+        Background="#1E1E1E" Foreground="White"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <!-- Style for common buttons -->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#333333"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="3">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#444444"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#666666"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Style for task action buttons (Complete/Delete) -->
+        <!-- This style is correctly defined with x:Key -->
+        <Style x:Key="TaskActionButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Padding" Value="6,3"/>
+            <Setter Property="Margin" Value="3,0"/>
+        </Style>
+
+        <!-- Style for TextBoxes -->
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+
+        <!-- Style for DatePicker -->
+        <Style TargetType="DatePicker">
+            <Setter Property="Background" Value="#2D2D30"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="3"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+
+        <!-- Style for ListBox -->
+        <Style TargetType="ListBox">
+            <Setter Property="Background" Value="#252526"/>
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+
+        <!-- Style for ScrollViewer -->
+        <Style TargetType="ScrollViewer">
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+        </Style>
+
+        <!-- Style for GroupBox -->
+        <Style TargetType="GroupBox">
+            <Setter Property="BorderBrush" Value="#555555"/>
+            <Setter Property="Foreground" Value="#ADD8E6"/>
+            <!-- Light blue for headers -->
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <!-- Style for Label -->
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="0,2,0,0"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Title/Header -->
+            <RowDefinition Height="*"/>
+            <!-- Chat Output and Task Management -->
+            <RowDefinition Height="Auto"/>
+            <!-- User Input -->
+        </Grid.RowDefinitions>
+
+        <!-- Main Title / Header -->
+        <Border Grid.Row="0" Background="#333333" Padding="10">
+            <TextBlock Text="Cybersecurity Assistant" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#ADD8E6"/>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <!-- Chatbot Panel -->
+                <ColumnDefinition Width="5"/>
+                <!-- Separator -->
+                <ColumnDefinition Width="1*"/>
+                <!-- Task Management Panel -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Chatbot Panel -->
+            <Border Grid.Column="0" BorderBrush="#555555" BorderThickness="1" CornerRadius="5" Background="#252526">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer x:Name="ChatOutputScrollViewer" Grid.Row="0" Margin="10" Padding="5">
+                        <StackPanel x:Name="ChatOutputStackPanel"/>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="10,0,10,10">
+                        <TextBox x:Name="UserInputTextBox" Text="Type your question here..." Width="Auto" HorizontalAlignment="Stretch"
+                                 KeyDown="UserInputTextBox_KeyDown"
+                                 GotFocus="UserInputTextBox_GotFocus" LostFocus="UserInputTextBox_LostFocus"
+                                 VerticalContentAlignment="Center"
+                                 Height="30"
+                                 Margin="0,0,5,0"
+                                 Grid.ColumnSpan="2"/>
+                        <Button x:Name="SendButton" Content="Send" Click="SendButton_Click" Height="30"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Separator -->
+            <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" Background="#444444" ResizeBehavior="PreviousAndNext"/>
+
+            <!-- Task Management Panel -->
+            <Border Grid.Column="2" BorderBrush="#555555" BorderThickness="1" CornerRadius="5" Background="#252526">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Add Task GroupBox -->
+                        <RowDefinition Height="Auto"/>
+                        <!-- View/Manage Button -->
+                        <RowDefinition Height="*"/>
+                        <!-- Task List -->
+                    </Grid.RowDefinitions>
+
+                    <!-- Add Task Section -->
+                    <GroupBox Header="Add New Task" Grid.Row="0">
+                        <StackPanel Margin="5">
+                            <Label Content="Title:"/>
+                            <TextBox x:Name="TaskTitleTextBox" />
+                            <Label Content="Description:"/>
+                            <TextBox x:Name="TaskDescriptionTextBox" />
+                            <Label Content="Reminder Date (Optional):"/>
+                            <DatePicker x:Name="ReminderDatePicker" />
+                            <Button Content="Add Task" Click="AddTaskButton_Click" Margin="0,10,0,0"/>
+                        </StackPanel>
+                    </GroupBox>
+
+                    <!-- View/Manage Tasks Button -->
+                    <Button Grid.Row="1" Content="View/Manage Tasks" Click="ViewManageTasksButton_Click" Margin="0,10,0,10"/>
+
+                    <!-- Task List Display -->
+                    <GroupBox Header="Your Cybersecurity Tasks" Grid.Row="2">
+                        <!-- REMOVED: ItemsSource="{Binding Tasks}" as items are added dynamically in C# -->
+                        <ListBox x:Name="TaskListDisplay" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <!-- Items are added dynamically in C# to allow for buttons per item -->
+                        </ListBox>
+                    </GroupBox>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</Window>
